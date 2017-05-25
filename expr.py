@@ -39,11 +39,20 @@ def sub_s(stk):
             break
     return i
 
+def fromat(str):
+    str = str.replace("+", " + ")
+    str = str.replace("-", " - ")
+    str = str.replace("*", " * ")
+    str = str.replace("/", " / ")
+    str = str.replace("(", " ( ")
+    str = str.replace(")", " ) ")
+    return str
+
 def cacl(expr):
     stk = stack()
     stk2 = stack()
     stk3 = stack()
-    for i in expr:
+    for i in fromat(expr).split():
         if i in "(+-*/":
             stk.push(i)
             continue
@@ -52,35 +61,38 @@ def cacl(expr):
         try:
             i = int(i)
         except:
-            if i in ")":
-                while True:
-                    if stk.top.data != '(':
-                        i = stk.pop()
-                        if isinstance(i,(int,float)):
-                            if stk3.top is not None:
+            try:
+                i = float(i)
+            except:
+                if i in ")":
+                    while True:
+                        if stk.top.data != '(':
+                            i = stk.pop()
+                            if isinstance(i,(int,float)):
+                                if stk3.top is not None:
+                                    stk3.push(i)
+                                else:
+                                    stk2.push(i)
+                            elif i in "+-":
+                                if stk3.top is not None:
+                                    stk2.push(sub_s(stk3))
+                                stk2.push(i)
+                            elif i in "*/":
+                                if stk3.top is None:
+                                    stk3.push(stk2.pop())
                                 stk3.push(i)
                             else:
-                                stk2.push(i)
-                        elif i in "+-":
+                                raise Exception("错误的表达式 --------")
+                        else:
+                            stk.pop()
                             if stk3.top is not None:
                                 stk2.push(sub_s(stk3))
-                            stk2.push(i)
-                        elif i in "*/":
-                            if stk3.top is None:
-                                stk3.push(stk2.pop())
-                            stk3.push(i)
-                        else:
-                            raise Exception("错误的表达式 --------")
+                            i = sub_s(stk2)
+                            break
                     else:
-                        stk.pop()
-                        if stk3.top is not None:
-                            stk2.push(sub_s(stk3))
-                        i = sub_s(stk2)
-                        break
+                        raise Exception("没有跳出循环")
                 else:
-                    raise Exception("没有跳出循环")
-            else:
-                raise Exception("需要 (")
+                    raise Exception("需要 (")
         stk.push(i)
 
     while stk.top:
@@ -106,4 +118,4 @@ def cacl(expr):
     return sub_s(stk2)
 
 if __name__ == "__main__":
-    print(cacl("(6 + 2 * 3) / ( 2 + ( 6 / ( 1 + 1 ) + 5 ) )"))
+    print(cacl("(60 + 2 * 3.2) / ( 20 + ( 6 / ( 1 + 10 ) + 5 ) )"))
