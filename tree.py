@@ -59,8 +59,8 @@ class Tree:
 
     def iter_visit_middle(self,fn):
         stack = STK()
-        stack.push(self)
         stk = STK()
+        stack.push(self)
         while stack.top:
             if stk.top:
                 if stack.top.value is not stk.top.value:
@@ -87,7 +87,37 @@ class Tree:
                     fn(p.root.value)
 
     def iter_visit_last(self,fn):
-        pass
+        stack = STK()
+        stk = STK()
+        stack.push(self)
+        while stack.top:
+            if stk.top:
+                if stack.top.value is not stk.top.value:
+                    p = stack.pop()
+                    if p.right or p.left:
+                        stk.push(p)
+                        stack.push(p)
+                    else:
+                        fn(p.root.value)
+                    if p.right:
+                        stack.push(p.right)
+                    if p.left:
+                        stack.push(p.left)
+                else:
+                    p = stack.pop()
+                    stk.pop()
+                    fn(p.root.value)
+            else:
+                p = stack.pop()
+                if p.right or p.left:
+                    stk.push(p)
+                    stack.push(p)
+                else:
+                    fn(p.root.value)
+                if p.right:
+                    stack.push(p.right)
+                if p.left:
+                    stack.push(p.left)
 
     def visit_level(self,fn):
         queue = Queue()
@@ -125,9 +155,12 @@ if __name__ == "__main__":
     print()
     a.visit_middle(p)
     print()
+    a.iter_visit_middle(p)
+    print()
     a.visit_last(p)
     print()
-    a.visit_level(p)
+    a.iter_visit_last(p)
     print()
-    a.iter_visit_middle(p)
+    a.visit_level(p)
+
 
