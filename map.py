@@ -18,8 +18,7 @@ class Map:
         self.__slot[address].append(node)
 
     def get(self,key,default = None):
-        _key = self.hash(key)
-        address = _key % self.__size
+        address = self.hash(key) % self.__size
         for node in self.__slot[address]:
             if node.key == key:
                 return node.value
@@ -29,8 +28,10 @@ class Map:
         address = self.hash(key) % self.__size
         try:
             self.__slot[address].remove(Node(key, None))
+            # 等值判断 的标准是 Node.__eq__()方法
+            # key 一样认为这两个是一致的
         except ValueError:
-            pass
+            print("error")
 
 if __name__ == "__main__":
     map = Map(16)
