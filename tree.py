@@ -162,5 +162,3 @@ if __name__ == "__main__":
     a.iter_visit_last(p)
     print()
     a.visit_level(p)
-
-
