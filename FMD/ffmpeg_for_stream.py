@@ -34,7 +34,7 @@ class stream():
 
     def video(self):
         ret = json.loads(self.info)["streams"]
-        for i in range(0,2):
+        for i in range(0,len(ret)):
             if ret[i]["codec_type"] == "video":
                 # 码率不存在或者是0，取无穷大
                 try:
