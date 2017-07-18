@@ -16,10 +16,6 @@ fi
 
 if [ $# -gt 1  ]
 then
-	if [ $A -lt 10 ]
-	then
-
-	A = 0$A
 echo
 hostname='live.mfniu.com'
 echo "$hostname"
